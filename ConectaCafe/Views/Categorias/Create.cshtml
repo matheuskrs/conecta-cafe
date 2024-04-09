@@ -1,8 +1,10 @@
 @model ConectaCafe.Models.Categoria
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Categorias";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
+
 
 <h1>Criar</h1>
 
@@ -25,5 +27,5 @@
 </div>
 
 <div>
-    <a asp-action="Index" class = "btn">Voltar para lista</a>
+    <a asp-action="Index" class = "btn btn-dark">Voltar para lista</a>
 </div>
