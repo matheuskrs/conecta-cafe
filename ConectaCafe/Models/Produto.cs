@@ -27,6 +27,7 @@ public class Produto
     [StringLength(200)]
     public string Foto { get; set; }
 // 
+    [Display(Name="Categoria")]
     public int CategoriaId { get; set; }
     [ForeignKey("CategoriaId")]
     public Categoria Categoria { get; set; }
