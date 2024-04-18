@@ -13,10 +13,12 @@ namespace ConectaCafe.Controllers
     public class ProdutosController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly IWebHostEnvironment _host;
 
-        public ProdutosController(AppDbContext context)
+        public ProdutosController(AppDbContext context, IWebHostEnvironment host)
         {
             _context = context;
+            _host = host;
         }
 
         // GET: Produtos
@@ -57,12 +59,27 @@ namespace ConectaCafe.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,Descricao,Preco,Foto,CategoriaId")] Produto produto)
+        public async Task<IActionResult> Create([Bind("Id,Nome,Descricao,Preco,Foto,CategoriaId")] Produto produto, IFormFile Arquivo)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(produto);
                 await _context.SaveChangesAsync();
+                if (Arquivo != null)
+                {
+                    // Criar imagem:
+                    string fileName = produto.Id + Path.GetExtension(Arquivo.FileName);
+                    string caminho = Path.Combine(_host.WebRootPath, "img\\produtos");
+                    string novoArquivo = Path.Combine(caminho, fileName);
+                    using (var stream = new FileStream(novoArquivo, FileMode.Create))
+                    {
+                        Arquivo.CopyTo(stream);
+                    }
+                    // Salvar imagem no banco:
+                    produto.Foto = "\\img\\produtos\\" + fileName;
+                    // Salvar modificações no context:
+                    await _context.SaveChangesAsync();
+                }
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoriaId"] = new SelectList(_context.Categorias, "Id", "Nome", produto.CategoriaId);
@@ -91,7 +108,7 @@ namespace ConectaCafe.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Descricao,Preco,Foto,CategoriaId")] Produto produto)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Descricao,Preco,Foto,CategoriaId")] Produto produto, IFormFile Arquivo)
         {
             if (id != produto.Id)
             {
@@ -102,6 +119,19 @@ namespace ConectaCafe.Controllers
             {
                 try
                 {
+                    if (Arquivo != null)
+                    {
+                        // Criar imagem:
+                        string fileName = produto.Id + Path.GetExtension(Arquivo.FileName);
+                        string caminho = Path.Combine(_host.WebRootPath, "img\\produtos");
+                        string novoArquivo = Path.Combine(caminho, fileName);
+                        using (var stream = new FileStream(novoArquivo, FileMode.Create))
+                        {
+                            Arquivo.CopyTo(stream);
+                        }
+                        // Alterar imagem no banco:
+                        produto.Foto = "\\img\\produtos\\" + fileName;
+                    }
                     _context.Update(produto);
                     await _context.SaveChangesAsync();
                 }
@@ -155,14 +185,14 @@ namespace ConectaCafe.Controllers
             {
                 _context.Produtos.Remove(produto);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ProdutoExists(int id)
         {
-          return _context.Produtos.Any(e => e.Id == id);
+            return _context.Produtos.Any(e => e.Id == id);
         }
     }
 }

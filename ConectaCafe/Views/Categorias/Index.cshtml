@@ -8,8 +8,7 @@
     <div class="col-12">
         <div class="card my-4">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                <div
-                    class="bg-gradient-warning shadow-warning border-radius-lg pt-4 pb-3 d-flex align-items-center justify-content-between">
+                <div class="bg-gradient-warning shadow-warning border-radius-lg pt-4 pb-3 d-flex align-items-center justify-content-between">
                     <h5 class="text-white text-capitalize ps-3 m-0">@ViewData["Title"]</h5>
                     <a asp-action="Create" class="text-white text-capitalise ps-3 me-3 d-flex align-items-center">
                         <i class="material-icons me-2">add</i>
@@ -32,7 +31,7 @@
                             @foreach (var item in Model)
                             {
                                 <tr>
-                                    <td class="ps-4 text-dark">
+                                    <td class="ps-2 text-dark">
                                         @Html.DisplayFor(modelItem => item.Nome)
                                     </td>
                                     <td>
@@ -62,7 +61,7 @@
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/2.0.3/i18n/pt-BR.json'
             },
-            initComplete: function(settings, json) {
+            initComplete: function (settings, json) {
                 document.querySelector('.dt-length').classList.add('text-xs');
                 document.querySelector('.dt-search').classList.add('text-xs');
                 document.querySelector('.dt-info').classList.add('text-xs');

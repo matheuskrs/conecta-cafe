@@ -15,16 +15,13 @@
         </div>
         <div class="card-body pb-2">
             <div class="row">
-                <dt class="col-sm-2 mb-3">
-                    @Html.DisplayNameFor(model => model.Nome)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Nome)
-                </dd>
-                </dl>
+                <div class="input-group input-group-outline mb-1">
+                    <label asp-for="Nome" class="form-label"></label>
+                    <input asp-for="Nome" class="form-control" readonly autocomplete="none" />
+                </div>
                 <div class="mb-3">
                     <form asp-action="Delete">
-                        <h5 class = "text-danger">Confirma a exclusão desta categoria?</h5>
+                        <h5 class="text-danger">Confirma a exclusão desta categoria?</h5>
                         <input type="hidden" asp-for="Id" />
                         <input type="submit" value="Deletar" class="btn btn-danger me-2 " />
                         <a asp-action="Index" class="btn btn-dark">Voltar</a>

@@ -1,0 +1,5 @@
+.remove-details:hover
+{
+    color:red;
+    transition:300ms;
+}
